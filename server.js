@@ -5,6 +5,7 @@ const helmet = require('helmet');
 const morgan = require('morgan');
 const rateLimit = require('express-rate-limit');
 const winston = require('winston');
+const path = require('path');
 
 // Import routes
 const notificationRoutes = require('./routes/notifications');
@@ -59,15 +60,17 @@ app.use(express.json({ limit: '10mb' }));
 app.use(express.urlencoded({ extended: true }));
 app.use('/api/', limiter);
 
-// Serve static files from public directory
-app.use(express.static('public'));
-
 // Initialize notification service
 const notificationService = new NotificationService();
 
 // Make services available to routes
 app.locals.notificationService = notificationService;
 app.locals.logger = logger;
+
+// API Routes (before static files to take priority)
+app.use('/api/notifications', notificationRoutes);
+app.use('/api/auth', authRoutes);
+app.use('/api/status', statusRoutes);
 
 // Health check endpoint
 app.get('/health', (req, res) => {
@@ -79,23 +82,33 @@ app.get('/health', (req, res) => {
   });
 });
 
-// API Routes
-app.use('/api/notifications', notificationRoutes);
-app.use('/api/auth', authRoutes);
-app.use('/api/status', statusRoutes);
-
-// Root endpoint
-app.get('/', (req, res) => {
+// API info endpoint for programmatic access
+app.get('/api', (req, res) => {
   res.json({
-    message: 'IoT Door Lock Server',
+    message: 'IoT Door Lock Server API',
     version: '1.0.0',
     endpoints: {
       health: '/health',
+      dashboard: '/',
       notifications: '/api/notifications',
       auth: '/api/auth',
       status: '/api/status'
     }
   });
+});
+
+// Serve static files from public directory (dashboard)
+app.use(express.static('public'));
+
+// Catch-all route for SPA (serve index.html for any non-API routes)
+app.get('*', (req, res, next) => {
+  // Skip if it's an API route
+  if (req.path.startsWith('/api') || req.path === '/health') {
+    return next();
+  }
+  
+  // Serve the dashboard for all other routes
+  res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
 
 // Error handling middleware
