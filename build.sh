@@ -5,7 +5,7 @@ echo "🚀 Starting build process..."
 
 # Install dependencies
 echo "📦 Installing dependencies..."
-npm ci --only=production
+npm install --production
 
 # Create logs directory if it doesn't exist
 mkdir -p logs
