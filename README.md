@@ -150,19 +150,26 @@ Add these includes to your ESP32 code:
 
 ## 🚀 Deployment on Render
 
-1. **Create a new Web Service on Render**
-   - Connect your GitHub repository
-   - Choose "Node" as the environment
-   - Build command: `npm install`
-   - Start command: `npm start`
+### Quick Deploy (Recommended)
 
-2. **Set Environment Variables**
-   - Go to your service settings on Render
-   - Add all the environment variables from your `.env` file
+1. **Fork this repository on GitHub**
+2. **Create Render account** at [render.com](https://render.com)
+3. **Create Web Service**:
+   - Connect GitHub repository: `Dhir-learner/iot2`
+   - Environment: `Node`  
+   - Build Command: `npm install`
+   - Start Command: `npm start`
+   - Node Version: `18`
+4. **Add Environment Variables** (see render-deployment.md for complete list):
+   ```
+   NODE_ENV=production
+   API_KEY=your-secure-api-key-here
+   TELEGRAM_BOT_TOKEN=your-bot-token
+   TELEGRAM_CHAT_ID=your-chat-id
+   ```
+5. **Deploy** - Service available at `https://your-service-name.onrender.com`
 
-3. **Deploy**
-   - Render will automatically deploy your service
-   - Your server will be available at: `https://your-service-name.onrender.com`
+📖 **Detailed Instructions**: See `render-deployment.md` for step-by-step guide
 
 ## 🔧 Configuration Options
 
