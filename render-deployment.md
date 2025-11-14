@@ -76,12 +76,20 @@ LOG_LEVEL=info
 
 ### Testing Deployment
 ```bash
-# Test health endpoint
+# Test health endpoint (JSON response)
 curl https://your-service-name.onrender.com/health
 
-# Test dashboard
+# Test API endpoint 
+curl https://your-service-name.onrender.com/api
+
+# Test dashboard (HTML page)
 # Visit https://your-service-name.onrender.com in browser
 ```
+
+### Expected Results:
+- **Main URL** (`https://your-service-name.onrender.com/`) → **Dashboard webpage** 🎯
+- **Health URL** (`/health`) → **JSON status response** for monitoring ✅  
+- **API URLs** (`/api/*`) → **JSON API responses** for ESP32 integration ✅
 
 ## Alternative: Deploy without Docker
 
